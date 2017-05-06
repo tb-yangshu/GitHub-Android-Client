@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gac.R;
+import com.gac.data.pref.AppPref;
 import com.gac.ui.base.BaseActivity;
 
 import butterknife.ButterKnife;
@@ -22,6 +23,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        if (AppPref.isFirstRunning(this)) {
+            AppPref.setAlreadyRun(this);
+        }
     }
 
 }

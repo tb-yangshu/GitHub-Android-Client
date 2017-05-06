@@ -4,24 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.Button;
 
 import com.gac.R;
-import com.gac.ui.base.BaseActivity;
-import com.gac.ui.main.MainActivity;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.github.paolorotolo.appintro.AppIntro;
+import com.github.paolorotolo.appintro.AppIntroFragment;
 
 /**
  * introduce activity
  * Created by spencer on 10/17/16.
  */
-public class IntroduceActivity extends BaseActivity {
-
-    @BindView(R.id.btn_jump_to_main)
-    Button mBtnJumpToMain;
+public class IntroduceActivity extends AppIntro {
 
     public static void launch(Context context) {
         context.startActivity(new Intent(context, IntroduceActivity.class));
@@ -31,14 +23,19 @@ public class IntroduceActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_introduce);
-        ButterKnife.bind(this);
+        addSlideFragment();
     }
 
+    private void addSlideFragment() {
+        addSlide(AppIntroFragment.newInstance(getString(R.string.intro_title),
+                getString(R.string.intro_desc),
+                R.drawable.ic_slide,
+                getResources().getColor(R.color.white),
+                getResources().getColor(R.color.blue_grey),
+                getResources().getColor(R.color.blue_grey)));
 
-    @OnClick(R.id.btn_jump_to_main)
-    void jumpToMain() {
-        MainActivity.launch(this);
-        finish();
+        addSlide(EndIntroSlideFragment.newInstance());
+
+        setProgressButtonEnabled(false);
     }
 }

@@ -186,4 +186,8 @@ dependencies {
     final ANDROID_PERFORMANCE_MONITOR = '1.5.0'
     debugCompile "com.github.markzhai:blockcanary-android:${ANDROID_PERFORMANCE_MONITOR}"
     releaseCompile "com.github.markzhai:blockcanary-no-op:${ANDROID_PERFORMANCE_MONITOR}"
+
+    // AppIntro
+    // https://github.com/apl-devs/AppIntro
+    compile 'com.github.paolorotolo:appintro:4.1.0'
 }
