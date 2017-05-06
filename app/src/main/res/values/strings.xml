@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">GitHub - Client</string>
+
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+
+    <string name="text_introduce">Introduce</string>
+    <string name="text_jump_to_main">jump to main</string>
+    <string name="text_click_reload_data">click reload data</string>
+    <string name="text_ok">ok</string>
+    <string name="text_encryption_errors">Encryption errors</string>
+    <string name="text_decryption_error">Decryption error</string>
+</resources>

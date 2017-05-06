@@ -1,0 +1,189 @@
+import org.moallemi.gradle.internal.VersionCodeType
+
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.jakewharton.hugo'
+apply plugin: 'com.getkeepsafe.dexcount'
+apply plugin: 'org.moallemi.advanced-build-version'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "com.gac"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testApplicationId "com.gac.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testHandleProfiling true
+        testFunctionalTest true
+
+        String _GITHUB_CLIENT_ID = project.hasProperty("GITHUB_CLIENT_ID") ? GITHUB_CLIENT_ID : properties.getProperty("GITHUB_CLIENT_ID")
+        buildConfigField "String", "GITHUB_CLIENT_ID", "\"$_GITHUB_CLIENT_ID\""
+
+        String _GITHUB_SECRET = project.hasProperty("GITHUB_SECRET") ? GITHUB_SECRET : properties.getProperty("GITHUB_SECRET")
+        buildConfigField "String", "GITHUB_SECRET", "\"$_GITHUB_SECRET\""
+
+        String _TEST_GITHUB_USERNAME = project.hasProperty("TEST_GITHUB_USERNAME") ? TEST_GITHUB_USERNAME : properties.getProperty("TEST_GITHUB_USERNAME")
+        buildConfigField "String", "TEST_GITHUB_USERNAME", "\"$_TEST_GITHUB_USERNAME\""
+
+        String _TEST_GITHUB_PASSWORD = project.hasProperty("TEST_GITHUB_PASSWORD") ? TEST_GITHUB_PASSWORD : properties.getProperty("TEST_GITHUB_PASSWORD")
+        buildConfigField "String", "TEST_GITHUB_PASSWORD", "\"$_TEST_GITHUB_PASSWORD\""
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles(file('proguard-rules').listFiles())
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
+}
+
+dexcount {
+    format = "list"
+    includeClasses = false
+    includeFieldCount = true
+    includeTotalMethodCount = false
+    orderByMethodCount = false
+    verbose = false
+    maxTreeDepth = Integer.MAX_VALUE
+    teamCityIntegration = false
+    enableForInstantRun = false
+    teamCitySlug = null
+    runOnEachAssemble = true
+}
+
+advancedVersioning {
+    nameOptions {
+        versionMajor 0
+        versionMinor 1
+    }
+
+    codeOptions {
+        versionCodeType VersionCodeType.AUTO_INCREMENT_ONE_STEP
+        dependsOnTasks 'debug', 'release', 'assemble'
+    }
+
+    outputOptions {
+        renameOutput true
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    testCompile 'junit:junit:4.12'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
+    })
+
+    compile project(':mvp')
+
+    // Google Support
+    final GOOGLE_SUPPORT_VERSION = '25.3.1'
+    compile "com.android.support:support-v4:$GOOGLE_SUPPORT_VERSION"
+    compile "com.android.support:appcompat-v7:$GOOGLE_SUPPORT_VERSION"
+    compile "com.android.support:recyclerview-v7:$GOOGLE_SUPPORT_VERSION"
+    compile "com.android.support:cardview-v7:$GOOGLE_SUPPORT_VERSION"
+    compile "com.android.support:design:$GOOGLE_SUPPORT_VERSION"
+    compile "com.android.support:support-annotations:$GOOGLE_SUPPORT_VERSION"
+
+    // ConstraintLayout
+    // https://developer.android.google.cn/training/constraint-layout/index.html
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    // RxJava
+    // https://github.com/ReactiveX/RxJava
+    compile 'io.reactivex:rxjava:1.2.5'
+
+    // RxAndroid
+    // https://github.com/ReactiveX/RxAndroid
+    compile 'io.reactivex:rxandroid:1.2.1'
+
+    // RxBinding
+    // https://github.com/JakeWharton/RxBinding
+    compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
+
+    // RxLifecycle
+    // https://github.com/trello/RxLifecycle
+    final RxLifecycle = '1.0'
+    compile "com.trello:rxlifecycle:${RxLifecycle}"
+    compile "com.trello:rxlifecycle-components:${RxLifecycle}"
+
+    // Dagger2
+    // https://github.com/google/dagger
+    final DAGGER_VERSION = '2.10'
+    compile "com.google.dagger:dagger:$DAGGER_VERSION"
+    apt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+
+    // ButterKnife
+    // https://github.com/JakeWharton/butterknife
+    final ButterKnife = '8.5.1'
+    compile "com.jakewharton:butterknife:${ButterKnife}"
+    apt "com.jakewharton:butterknife-compiler:${ButterKnife}"
+
+    // Retrofit
+    // https://github.com/square/retrofit
+    final RETROFIT = '2.1.0'
+    compile "com.squareup.retrofit2:retrofit:${RETROFIT}"
+    compile "com.squareup.retrofit2:converter-gson:${RETROFIT}"
+    compile "com.squareup.retrofit2:adapter-rxjava:${RETROFIT}"
+
+    // OkHttp
+    // https://github.com/square/okhttp
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+
+    // OkHttp Logging Interceptors
+    // https://github.com/square/okhttp/wiki/Interceptors
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+
+    // EventBus
+    // https://github.com/greenrobot/EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    // Glide
+    // https://github.com/bumptech/glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    // Logger
+    // https://github.com/orhanobut/logger
+    compile 'com.orhanobut:logger:1.15'
+
+    // BaseRecyclerViewAdapterHelper
+    // https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.12'
+
+    // LeakCanary
+    // https://github.com/square/leakcanary
+    final LeakCanary = '1.5'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:${LeakCanary}"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${LeakCanary}"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${LeakCanary}"
+
+    // AndroidPerformanceMonitor
+    // https://github.com/markzhai/AndroidPerformanceMonitor
+    final ANDROID_PERFORMANCE_MONITOR = '1.5.0'
+    debugCompile "com.github.markzhai:blockcanary-android:${ANDROID_PERFORMANCE_MONITOR}"
+    releaseCompile "com.github.markzhai:blockcanary-no-op:${ANDROID_PERFORMANCE_MONITOR}"
+}
