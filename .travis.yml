@@ -1,0 +1,43 @@
+language: android
+
+sudo: false
+
+env:
+  global:
+  - ADB_INSTALL_TIMEOUT=8
+
+android:
+  components:
+  - tools
+  - platform-tools
+  - build-tools-25.0.2
+  - android-25
+  - extra-android-m2repository
+  - extra-android-support
+
+jdk:
+- oraclejdk8
+
+branches:
+  except:
+  - gh-pages
+
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle
+
+before_install:
+- mkdir "$ANDROID_HOME/licenses" || true
+- echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+- echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+install:
+- true
+
+script:
+- ./gradlew clean build checkstyle lint
+
+notifications:
+  slack:
+    secure: IqboLbj2kVg5w8H9Z1hgxjOsfo3+IUuf8xzW6QNvNjKDnNxGnk7IwNII+Todxab0MDn+ydfwzsoUvtQ32wU2NVu7Kmp8EwJXTzQQuJTbNIk0vdNGLWh+gtaD49LOqS7Mx/jqTShA1mjMVshmQ7eky0rEJyMLUxzDOe/33tK0yp0+xXw7DUtJURpB5E1MHGjnglXhe+vjNXKeVKyb9177Qg3YHbUoplBPo9SwmSwZt882W9m3H5qKRKWF2VhqYfLHrKBrizXk5iXq1VUOVrUcG8fCvFWJH91vAIaM4WDoAYkqcctuCim46EK7VCJcDZk3mYWu/MkZEOfAVIKm/CiwDiLMDjU8ulJSwHYiZXH5Q1aHjMK9S4Vv0SQqtL/o57WFcJKG9i7vsEMGKvIfqnzT2os2w8EONFWokjfyrPhSJxKSxuBO9LEJscrlEytt1gePPmP6kmzVUrwcXC4NAHN553AEZg41W+u10FDK+2yWuWqyBLy0In9l3HDN+bJ8zmouV73iRv7wKnKCBp5GyrDF7PDaQ+atAGJ/n/FWmU0CStGF/4Yl0AO+iA4W16KHgVE1eEnPGdIi0bAoAlpOH5qIzo7li/oaOcGkY/yXDanDTgsqGXhRbeUz0mxSpVJJvSe6NPR29/AfZanwBN3RKwAGnr14Kpo1ARmJXuSTAnv4ZUM=
