@@ -5,9 +5,9 @@ import android.app.Application;
 import com.gac.common.config.GitHubConfig;
 import com.gac.data.bean.model.User;
 import com.gac.data.net.api.AccountApi;
-import com.gac.data.net.client.GitHubAuthRetrofit;
 import com.gac.data.net.request.CreateAuthorization;
 import com.gac.data.net.response.AuthorizationResp;
+import com.gac.data.net.retrofit.GitHubAuthRetrofit;
 import com.gac.data.net.service.AccountService;
 import com.gac.data.pref.UserPref;
 

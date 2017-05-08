@@ -1,6 +1,7 @@
-package com.gac.data.net.client;
+package com.gac.data.net.retrofit;
 
 
+import com.gac.data.net.client.AuthHttpClient;
 import com.gac.data.net.core.ApiEndpoint;
 import com.gac.data.net.core.BaseRetrofit;
 

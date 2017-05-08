@@ -28,5 +28,4 @@ public class MainActivity extends BaseActivity {
             AppPref.setAlreadyRun(this);
         }
     }
-
 }
